@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Burgers</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        img {
+            margin-top: 20px;
+            width: 300px;
+            height: auto;
+        }
+        .story {
+            margin: 20px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .poll {
+            margin: 20px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .poll button {
+            margin-top: 10px;
+        }
+        .results {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        let appleVotes = 0;
+        let grapeVotes = 0;
+
+        function vote(choice) {
+            if (choice === 'apple') {
+                appleVotes++;
+            } else if (choice === 'grape') {
+                grapeVotes++;
+            }
+            showResults();
+        }
+
+        function showResults() {
+            const totalVotes = appleVotes + grapeVotes;
+            const applePercentage = ((appleVotes / totalVotes) * 100).toFixed(1);
+            const grapePercentage = ((grapeVotes / totalVotes) * 100).toFixed(1);
+
+            document.getElementById('results').innerHTML = `
+                <p>Apple Juice: ${appleVotes} votes (${applePercentage}%)</p>
+                <p>Grape Juice: ${grapeVotes} votes (${grapePercentage}%)</p>
+            `;
+        }
+    </script>
+</head>
+<body>
+    <h1>Welcome to Burgers</h1>
+    <img src="https://placekitten.com/300/300" alt="Cat">
+    <div class="story">
+        <p>In a magical world, far beyond the reach of ordinary realms, a humble burger chain was born. It all started when a group of adventurous chefs stumbled upon a secret recipe book hidden in an enchanted forest. With each bite, their burgers brought joy and wonder to creatures of all kinds, turning their small venture into a beloved haven for all magical beings.</p>
+    </div>
+    <div class="poll">
+        <h2>Which juice do you prefer?</h2>
+        <button onclick="vote('apple')">Apple Juice</button>
+        <button onclick="vote('grape')">Grape Juice</button>
+        <div id="results" class="results"></div>
+    </div>
+</body>
+</html>
