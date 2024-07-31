@@ -36,27 +36,41 @@
         }
     </style>
     <script>
-        let appleVotes = 0;
-        let grapeVotes = 0;
-
-        function vote(choice) {
-            if (choice === 'apple') {
-                appleVotes++;
-            } else if (choice === 'grape') {
-                grapeVotes++;
-            }
-            showResults();
+        async function fetchVotes() {
+            const response = await fetch('https://<your-function-app-name>.azurewebsites.net/api/GetVotes');
+            const data = await response.json();
+            return data;
         }
 
-        function showResults() {
-            const totalVotes = appleVotes + grapeVotes;
-            const applePercentage = ((appleVotes / totalVotes) * 100).toFixed(1);
-            const grapePercentage = ((grapeVotes / totalVotes) * 100).toFixed(1);
+        async function sendVote(choice) {
+            const response = await fetch('https://<your-function-app-name>.azurewebsites.net/api/Vote', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ choice })
+            });
+            const data = await response.json();
+            return data;
+        }
+
+        async function vote(choice) {
+            const votes = await sendVote(choice);
+            showResults(votes);
+        }
+
+        async function showResults(votes) {
+            const totalVotes = votes.appleVotes + votes.grapeVotes;
+            const applePercentage = totalVotes ? ((votes.appleVotes / totalVotes) * 100).toFixed(1) : 0;
+            const grapePercentage = totalVotes ? ((votes.grapeVotes / totalVotes) * 100).toFixed(1) : 0;
 
             document.getElementById('results').innerHTML = `
-                <p>Apple Juice: ${appleVotes} votes (${applePercentage}%)</p>
-                <p>Grape Juice: ${grapeVotes} votes (${grapePercentage}%)</p>
+                <p>Apple Juice: ${votes.appleVotes} votes (${applePercentage}%)</p>
+                <p>Grape Juice: ${votes.grapeVotes} votes (${grapePercentage}%)</p>
             `;
+        }
+
+        window.onload = async () => {
+            const votes = await fetchVotes();
+            showResults(votes);
         }
     </script>
 </head>
